@@ -1,0 +1,7 @@
+{
+  "csv_chats": "C:/Users/B072626/Desktop/IA_Analyzer/Datos/Chat.csv",
+  "csv_intents": "C:/Users/B072626/Desktop/IA_Analyzer/Datos/intent.csv",
+  "output_folder": "C:/Users/Higan/Desktop/preuba",
+  "llm_url": "http://localhost:11434",
+  "llm_id": "qwen2.5-7b-instruct-1m"
+}
