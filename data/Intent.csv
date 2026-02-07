@@ -1,0 +1,25 @@
+Intent Display Name,Language,Phrase
+Prestamos_Solicitud,es,Quiero solicitar un préstamo
+,,Necesito un préstamo personal
+,,Me pueden dar un préstamo?
+,,Cómo saco un préstamo?
+
+Cuentas_Resumen,es,Quiero ver el resumen de mi cuenta
+,,Resumen de mi cuenta
+,,Ver movimientos de mi cuenta
+,,Estado de cuenta
+
+Tarjetas_Resumen,es,Quiero ver el resumen de mi tarjeta
+,,No veo los consumos de mi tarjeta
+,,Resumen tarjeta
+,,Gastos de mi tarjeta
+
+Transferencias,es,Quiero transferir dinero
+,,Hacer una transferencia
+,,Enviar plata
+,,Transferir a otro banco
+
+Cuentas_Alta,es,Quiero abrir una cuenta
+,,Quiero ser cliente
+,,Necesito una cuenta bancaria
+,,Abrir cuenta corriente

@@ -1,0 +1,45 @@
+session_id,tipo,texto,intent_detectado,fecha
+
+s1,bot,"Hola, soy Santi. ¿En qué te ayudo?",CHIT_hola_AV,2026-01-01
+s1,usuario,"Hola",,2026-01-01
+s1,bot,"¿En qué puedo ayudarte?",CHIT_chat,2026-01-01
+s1,usuario,"Quiero solicitar un préstamo",,2026-01-01
+s1,bot,"Tenemos varias opciones de préstamos disponibles",Prestamos_Solicitud,2026-01-01
+s1,usuario,"Cuánto me pueden dar?",,2026-01-01
+s1,bot,"Ups, no entendí tu consulta",NO_MATCH-sys.no-match-1,2026-01-01
+
+
+s2,bot,"Hola, soy Santi",CHIT_hola_AV,2026-01-02
+s2,usuario,"Quiero ver mi resumen",,2026-01-02
+s2,bot,"Podés consultar los movimientos de tu cuenta",Cuentas_Resumen,2026-01-02
+s2,usuario,"El del mes pasado",,2026-01-02
+s2,bot,"No entendí a qué te referís",NO_MATCH-sys.no-match-1,2026-01-02
+s2,usuario,"Marzo",,2026-01-02
+s2,bot,"Ups, todavía no aprendí eso",NO_MATCH-sys.no-match-1,2026-01-02
+
+
+s3,bot,"Hola 👋",CHIT_hola_AV,2026-01-03
+s3,usuario,"Quiero ver el resumen de mi tarjeta",,2026-01-03
+s3,bot,"Podés ver tus consumos recientes",Tarjetas_Resumen,2026-01-03
+s3,usuario,"No aparece el consumo de abril",,2026-01-03
+s3,bot,"Podrías revisar más tarde",Tarjetas_Resumen,2026-01-03
+s3,usuario,"Pero es tarjeta adicional",,2026-01-03
+s3,bot,"No entendí tu consulta",NO_MATCH-sys.no-match-1,2026-01-03
+
+
+s4,bot,"Hola, ¿en qué te ayudo?",CHIT_hola_AV,2026-01-04
+s4,usuario,"Necesito transferir dinero",,2026-01-04
+s4,bot,"Podés hacer transferencias desde tu cuenta",Transferencias,2026-01-04
+s4,usuario,"A otro banco",,2026-01-04
+s4,bot,"Claro, se puede hacer",Transferencias,2026-01-04
+s4,usuario,"Con dólares",,2026-01-04
+s4,bot,"Ups, no entendí eso",NO_MATCH-sys.no-match-1,2026-01-04
+
+
+s5,bot,"Hola soy Santi",CHIT_hola_AV,2026-01-05
+s5,usuario,"Quiero abrir una cuenta",,2026-01-05
+s5,bot,"Podemos ayudarte a crear una cuenta",Cuentas_Alta,2026-01-05
+s5,usuario,"Para mi hijo",,2026-01-05
+s5,bot,"No entendí tu solicitud",NO_MATCH-sys.no-match-1,2026-01-05
+s5,usuario,"Es menor de edad",,2026-01-05
+s5,bot,"Ups, todavía no manejo ese caso",NO_MATCH-sys.no-match-1,2026-01-05
