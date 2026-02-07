@@ -49,11 +49,19 @@ Define la configuración base del análisis:
 {
   "csv_chats": "data/Chat.csv",
   "csv_intents": "data/Intent.csv",
-  "output_folder": "data",
+  "output_folder": "outputs",
   "llm_url": "http://localhost:11434",
-  "llm_id": "qwen2.5-7b-instruct-1m"
+  "llm_id": "qwen2.5-7b-instruct-1m",
+  "model_path": "",
+  "n_ctx": 4096,
+  "n_threads": 8,
+  "max_workers": 4,
+  "write_debug": false
 }
 ```
+
+- `model_path`: ruta al GGUF para el pipeline local (vacío = solo contexto + retriever + slots, sin LLM).
+- `n_ctx`, `n_threads`, `max_workers`: parámetros del LLM local y paralelismo.
 
 ---
 
