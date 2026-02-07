@@ -122,6 +122,8 @@ build_y_limpiar.bat
 - Limpia `__pycache__` y temporales
 - Copia configuración necesaria
 
+**Pipeline local con modelo GGUF:** usar `--onedir`; colocar el GGUF en `models/` junto al ejecutable. En `config.json`, `model_path` debe apuntar a la ruta relativa o absoluta del .gguf. Si se empaqueta, `resolve_model_path` en `llm_runtime.py` resuelve rutas relativas al exe.
+
 ---
 
 ## 🧪 Casos esperados
