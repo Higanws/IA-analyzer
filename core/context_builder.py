@@ -18,25 +18,29 @@ def infer_flow_ref(
     """
     session_id = trigger_user_turn.get("session_id")
     turn_index = trigger_user_turn.get("turn_index", -1)
+    if turn_index is None:
+        turn_index = -1
     session = df_turns[df_turns["session_id"] == session_id].sort_values("turn_index")
     session = session[session["turn_index"] < turn_index]
     if session.empty:
         return "UNKNOWN", ""
     flow_ref = "UNKNOWN"
     last_valid_intent = ""
+    row_with_last_intent = None
     for _, row in session.iloc[::-1].iterrows():
         intent = str(row.get("intent_detectado", "") or "").strip()
         flow = str(row.get("flow_from_intent", "") or "").strip()
         if not intent or flow.upper() == "NO_MATCH":
             continue
         last_valid_intent = intent
+        row_with_last_intent = row
         if flow and flow not in neutral_flows:
             flow_ref = flow
             break
         if flow_ref == "UNKNOWN":
             flow_ref = flow or "UNKNOWN"
-    if flow_ref == "UNKNOWN" and last_valid_intent:
-        flow_ref = (session.iloc[-1].get("flow_from_intent") or "").strip() or "UNKNOWN"
+    if flow_ref == "UNKNOWN" and last_valid_intent and row_with_last_intent is not None:
+        flow_ref = (row_with_last_intent.get("flow_from_intent") or "").strip() or "UNKNOWN"
     return flow_ref, last_valid_intent
 
 
@@ -54,6 +58,8 @@ def build_context_window(
     """
     session_id = trigger_user_turn.get("session_id")
     turn_index = trigger_user_turn.get("turn_index", -1)
+    if turn_index is None:
+        turn_index = -1
     session = df_turns[df_turns["session_id"] == session_id].sort_values("turn_index")
     session = session[session["turn_index"] <= turn_index]
     if session.empty:
