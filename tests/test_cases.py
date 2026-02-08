@@ -27,10 +27,14 @@ s1,bot,NO_MATCH,NO_MATCH
     df = pd.read_csv(io.StringIO(csv_content))
     with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
         df.to_csv(f.name, index=False)
+        f.close()
         try:
             df_turns = cargar_chats_as_turns(f.name)
         finally:
-            os.unlink(f.name)
+            try:
+                os.unlink(f.name)
+            except OSError:
+                pass
     cases = extract_no_match_cases(df_turns)
     assert len(cases) == 1
     case = cases[0]

@@ -1,0 +1,147 @@
+{
+  "total_casos_no_match": 7,
+  "por_flow": {
+    "Cuentas": {
+      "cantidad_casos": 4,
+      "decisiones": [
+        "AMBIGUOUS",
+        "AMBIGUOUS",
+        "AMBIGUOUS",
+        "AMBIGUOUS"
+      ],
+      "resumen_decisiones": {
+        "AMBIGUOUS": 4
+      },
+      "mensajes_no_match": [
+        "El del mes pasado",
+        "Marzo",
+        "Para mi hijo",
+        "Es menor de edad"
+      ],
+      "intent_top_counts": {
+        "Cuentas_Resumen": 4
+      },
+      "improvements_consolidados": [],
+      "new_training_phrases_consolidados": {}
+    },
+    "Prestamos": {
+      "cantidad_casos": 1,
+      "decisiones": [
+        "AMBIGUOUS"
+      ],
+      "resumen_decisiones": {
+        "AMBIGUOUS": 1
+      },
+      "mensajes_no_match": [
+        "Cuánto me pueden dar?"
+      ],
+      "intent_top_counts": {
+        "Prestamos_Solicitud": 1
+      },
+      "improvements_consolidados": [],
+      "new_training_phrases_consolidados": {}
+    },
+    "Tarjetas": {
+      "cantidad_casos": 1,
+      "decisiones": [
+        "AMBIGUOUS"
+      ],
+      "resumen_decisiones": {
+        "AMBIGUOUS": 1
+      },
+      "mensajes_no_match": [
+        "Pero es tarjeta adicional"
+      ],
+      "intent_top_counts": {
+        "Tarjetas_Resumen": 1
+      },
+      "improvements_consolidados": [],
+      "new_training_phrases_consolidados": {}
+    },
+    "Transferencias": {
+      "cantidad_casos": 1,
+      "decisiones": [
+        "AMBIGUOUS"
+      ],
+      "resumen_decisiones": {
+        "AMBIGUOUS": 1
+      },
+      "mensajes_no_match": [
+        "Con dólares"
+      ],
+      "intent_top_counts": {
+        "Transferencias": 1
+      },
+      "improvements_consolidados": [],
+      "new_training_phrases_consolidados": {}
+    }
+  },
+  "por_intent": {
+    "Cuentas|Cuentas_Resumen": {
+      "flow": "Cuentas",
+      "intent": "Cuentas_Resumen",
+      "cantidad_casos": 4,
+      "decisiones": [
+        "AMBIGUOUS",
+        "AMBIGUOUS",
+        "AMBIGUOUS",
+        "AMBIGUOUS"
+      ],
+      "resumen_decisiones": {
+        "AMBIGUOUS": 4
+      },
+      "mensajes_no_match_sample": [
+        "El del mes pasado",
+        "Marzo",
+        "Para mi hijo",
+        "Es menor de edad"
+      ],
+      "improvements_consolidados": []
+    },
+    "Prestamos|Prestamos_Solicitud": {
+      "flow": "Prestamos",
+      "intent": "Prestamos_Solicitud",
+      "cantidad_casos": 1,
+      "decisiones": [
+        "AMBIGUOUS"
+      ],
+      "resumen_decisiones": {
+        "AMBIGUOUS": 1
+      },
+      "mensajes_no_match_sample": [
+        "Cuánto me pueden dar?"
+      ],
+      "improvements_consolidados": []
+    },
+    "Tarjetas|Tarjetas_Resumen": {
+      "flow": "Tarjetas",
+      "intent": "Tarjetas_Resumen",
+      "cantidad_casos": 1,
+      "decisiones": [
+        "AMBIGUOUS"
+      ],
+      "resumen_decisiones": {
+        "AMBIGUOUS": 1
+      },
+      "mensajes_no_match_sample": [
+        "Pero es tarjeta adicional"
+      ],
+      "improvements_consolidados": []
+    },
+    "Transferencias|Transferencias": {
+      "flow": "Transferencias",
+      "intent": "Transferencias",
+      "cantidad_casos": 1,
+      "decisiones": [
+        "AMBIGUOUS"
+      ],
+      "resumen_decisiones": {
+        "AMBIGUOUS": 1
+      },
+      "mensajes_no_match_sample": [
+        "Con dólares"
+      ],
+      "improvements_consolidados": []
+    }
+  }
+}

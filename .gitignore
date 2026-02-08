@@ -167,6 +167,10 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+# Binarios opcionales (llama/ggml); no usados por IA Analyzer
+bin/*.dll
+bin/*.exe
+
 # Ruff stuff:
 .ruff_cache/
 

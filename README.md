@@ -1,96 +1,69 @@
-# 🧠 IA Analyzer (Versión Monolito)
+# IA Analyzer
 
-IA Analyzer es una aplicación de escritorio construida con **Python + Tkinter**, diseñada para analizar logs de conversaciones y detectar `NO_MATCH` mediante un modelo LLM externo (local o vía API). Esta versión integra toda la lógica y UI en un único ejecutable `.exe`.
+App de escritorio (**Python + Tkinter**) para analizar conversaciones de chatbot y clasificar errores **NO_MATCH**: pipeline local con retriever (TF-IDF), slots y, opcionalmente, **LLM embebida** (GGUF) como juez.
 
-## 📁 Estructura del Proyecto
+**Para quien clona el repo:** esta es la guía de arranque. Documentación técnica (arquitectura, especificación del pipeline, qué es analyzer_cli, tests, build) está en **[docs/](docs/README.md)**.
 
-IA_Analyzer/
-├── app.py                     # Punto de entrada principal
-├── core/                      # Módulos de backend integrados
-│   ├── analyzer.py
-│   ├── file_manager.py
-│   ├── mistral_runner.py
-│   ├── preprocess.py
-│   └── prompt_builder.py
-├── views/                     # Vistas de la UI
-│   ├── analysis_view.py
-│   ├── chats_view.py
-│   ├── config_view.py
-│   ├── intents_view.py
-│   └── sidebar.py
-├── config/
-│   └── config.json
-├── data/                      # Archivos .csv de entrada/salida
-├── style.py
-├── requirements.txt
-└── build_y_limpiar.bat        # Script para compilar y limpiar
+---
 
-## ⚙️ Requisitos
+## Requisitos
 
-- Python 3.12+
-- Pip
-- Acceso a un modelo LLM vía API (`config.json` lo define)
+- **Python 3.12+**
+- **Pip**
 
-Instalación de dependencias:
+En **Windows** podés usar **preparar_entorno.bat** (doble clic o `preparar_entorno.bat <accion>`). Los scripts que preparan el entorno (deps, modelo, LLM) están en la carpeta **entorno/**.
 
+---
+
+## 1. Preparar entorno (una sola vez)
+
+En la raíz del proyecto:
+
+```bash
+python entorno/install_llm.py
 ```
-pip install -r requirements.txt
-```
+(El script instala también las dependencias de `requirements.txt`.)
 
-## 🚀 Uso
+En Windows: **preparar_entorno.bat** → opción **1** (o `preparar_entorno.bat install-llm`).
 
-1. Configurar `config/config.json` con:
+Ese script (en `entorno/`) instala dependencias si faltan, descarga el modelo GGUF (Qwen 0.5B) en `models/` si no existe, instala `llama-cpp-python` y en Windows aplica el parche para WinError 127 si hace falta. Si no querés usar LLM, dejá `"model_path": ""` en `config/config.json`; el pipeline corre igual.
 
-```json
-{
-  "csv_chats": "data/Chat.csv",
-  "csv_intents": "data/Intent.csv",
-  "output_folder": "data",
-  "llm_url": "http://localhost:11434",
-  "llm_id": "qwen2.5-7b-instruct-1m"
-}
-```
+---
 
-2. Ejecutar la app:
+## 2. Ejecutar la app
 
-```
+```bash
 python app.py
 ```
 
-## 🛠 Compilación a `.exe`
+1. En **Configuración** revisá (o editá) rutas de CSV de chats, intents y carpeta de salida.
+2. En **Análisis** pulsá **Iniciar análisis**. El progreso se muestra en consola; al terminar se ve la tabla con resultados.
 
-Usá el script:
+**Por línea de comandos (CLI):** el mismo pipeline se puede ejecutar sin GUI con **analyzer_cli.py** (ver [docs/ — CLI y analyzer_cli](docs/README.md)).
 
-```
-build_y_limpiar.bat
-```
-
-Esto:
-- Compila la app con PyInstaller
-- Limpia `__pycache__`, `build/`, `.spec`
-- Copia `config.json` al ejecutable final
-
-El ejecutable se generará en:
-
-```
-dist/IA_Analyzer/IA_Analyzer.exe
+```bash
+python analyzer_cli.py --chats data/Chat.csv --training data/Intent.csv --out outputs/
 ```
 
-## 🧩 Funcionalidades
+Con config y LLM: añadí `--config config/config.json`. Sin LLM: `--no-llm`.
 
-- ✅ Visualización de archivos `Chat.csv` e `Intent.csv`
-- ✅ Forward-fill automático en intents
-- ✅ Configuración persistente desde archivo
-- ✅ Análisis directo contra modelo LLM
-- ✅ Consola integrada en UI
-- ✅ Compatible con compilación standalone
+---
 
-## 🔒 Notas
+## Configuración mínima
 
-- Esta versión no requiere Python instalado al ejecutarse compilado.
-- No escribe archivos de debug.
-- Todo está embebido dentro del `.exe`.
+En `config/config.json`:
 
-## 📬 Licencia
+| Clave            | Descripción |
+|------------------|-------------|
+| `csv_chats`      | Ruta al CSV de chats. |
+| `csv_intents`    | Ruta al CSV de intents / training phrases. |
+| `output_folder`  | Carpeta de salida. |
+| `model_path`     | Nombre del .gguf en `models/` (vacío = sin LLM). |
+
+El resto de opciones y la documentación técnica están en **[docs/](docs/README.md)**.
+
+---
+
+## Licencia
 
 Uso interno (Banco Santander). Distribución restringida bajo autorización.

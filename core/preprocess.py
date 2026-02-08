@@ -1,5 +1,4 @@
 import pandas as pd
-from typing import Dict, List
 import unicodedata
 
 
@@ -61,17 +60,3 @@ def cargar_chats_as_turns(path_chat_csv: str) -> pd.DataFrame:
     df["flow_from_intent"] = df["intent_detectado"].astype(str).map(_flow_from_intent)
     df["turn_index"] = df.groupby("session_id").cumcount()
     return df
-
-def procesar_chats(df: pd.DataFrame) -> Dict[str, List[Dict[str, str]]]:
-    sesiones = {}
-    for session_id, grupo in df.groupby('session_id'):
-        mensajes = []
-        for _, fila in grupo.iterrows():
-            intent = fila["intent_detectado"]
-            mensajes.append({
-                "texto": str(fila["texto"]),
-                "tipo": str(fila["tipo"]),
-                "intent_detectado": "" if pd.isna(intent) or intent == "" else str(intent)
-            })
-        sesiones[session_id] = mensajes
-    return sesiones

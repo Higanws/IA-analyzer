@@ -783,7 +783,7 @@ Objetivo: alinear el repositorio **IA-analyzer** con la especificación de **Dia
 |------|--------|
 | 0.1 | Crear carpeta `core/spec/` o `core/config/` y mover allí constantes compartidas: MAX_MSG_CONTEXT=12, TOP_INTENTS=10, EVIDENCE_PER_INTENT=6, STRONG_MATCH=0.72, WEAK_MATCH=0.55, set de flows neutrales (CHIT, GENERIC, SALUDO, etc.). |
 | 0.2 | Documentar en `DOCUMENTACION.md` la existencia de dos modos: “actual (API)” y “nuevo (embebido + retrieval)” cuando existan. |
-| 0.3 | Añadir en `requirements.txt` o entorno: `llama-cpp-python` (con versión fijada cuando se use). |
+| 0.3 | Dependencias en `requirements.txt` (consolidado); `llama-cpp-python` lo instala el script `entorno/install_llm.py` (en Windows con wheel CPU si aplica). |
 
 ## Fase 1: Datos y casos NO_MATCH
 

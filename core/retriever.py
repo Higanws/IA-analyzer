@@ -35,7 +35,8 @@ def retrieve_candidates(
     Búsqueda por similitud (coseno), agregación por intent:
     max_sim, avg_sim_top5, hits, score_intent = 0.65*max_sim + 0.25*avg_top5 + 0.10*log(1+hits).
     Priorización: score *= 1.1 si intent.flow == flow_ref (y flow_ref no UNKNOWN/CHIT).
-    Devuelve lista de dicts con intent, flow, score, evidence [{phrase, sim}].
+    Devuelve lista de dicts con intent, flow, score, evidence [{phrase, sim}], training_phrases.
+    evidence: frases de entrenamiento de ese intent que más se parecieron al trigger (TF-IDF) y su similitud.
     """
     if not trigger_user_text_norm or not index.get("matrix").size:
         return []
@@ -63,11 +64,13 @@ def retrieve_candidates(
             {"phrase": r["phrase"], "sim": float(r["_sim"])}
             for _, r in top_rows.head(evidence_per_intent).iterrows()
         ]
+        training_phrases = grp["phrase"].dropna().astype(str).tolist() if "phrase" in grp.columns else []
         results.append({
             "intent": intent,
             "flow": flow,
             "score": round(score_intent, 4),
             "evidence": evidence,
+            "training_phrases": training_phrases,
         })
     results.sort(key=lambda x: -x["score"])
     return results[:top_intents]

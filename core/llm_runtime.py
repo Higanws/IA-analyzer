@@ -13,7 +13,7 @@ from typing import Any, Dict, List
 
 try:
     from llama_cpp import Llama
-except ImportError:
+except (ImportError, FileNotFoundError, OSError):
     Llama = None  # type: ignore
 
 # ---------------------------- Helpers: paths ----------------------------
@@ -156,7 +156,10 @@ class LocalLLM:
             return safe_json_loads(text2)
 
     def judge_case(self, payload: Dict[str, Any]) -> Dict[str, Any]:
-        return self.chat_json(build_judge_prompt(payload))
+        result = self.chat_json(build_judge_prompt(payload))
+        if "confidence" not in result:
+            result["confidence"] = 0.5
+        return result
 
     def embed_text(self, text: str) -> List[float]:
         if hasattr(self.llm, "embed"):

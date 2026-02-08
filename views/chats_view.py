@@ -3,10 +3,9 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 import pandas as pd
-import json
 import os
 
-CONFIG_PATH = "config/config.json"
+from core.config_loader import load_config, get_config_path, resolve_data_path
 
 class ChatsView(tk.Frame):
     def __init__(self, parent):
@@ -19,15 +18,17 @@ class ChatsView(tk.Frame):
         self.cargar_datos()
 
     def cargar_datos(self):
-        if not os.path.exists(CONFIG_PATH):
+        if not os.path.isfile(get_config_path()):
             messagebox.showerror("Error", "No se encontró el archivo de configuración.")
             return
 
-        with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-            config = json.load(f)
-
+        config = load_config()
         csv_path = config.get("csv_chats")
-        if not csv_path or not os.path.exists(csv_path):
+        if not csv_path:
+            messagebox.showerror("Error", "Ruta del CSV de chats no definida.")
+            return
+        csv_path = resolve_data_path(csv_path)
+        if not os.path.exists(csv_path):
             messagebox.showerror("Error", "Ruta del CSV de chats no válida o no definida.")
             return
 

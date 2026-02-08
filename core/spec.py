@@ -1,6 +1,6 @@
 """
 Constantes compartidas para el pipeline Dialogflow NO_MATCH Analyzer.
-Referencia: Modif/modificacione.md
+Referencia: docs/SPEC_PIPELINE.md
 """
 import os
 

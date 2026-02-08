@@ -1,10 +1,44 @@
 """
-Orquestador del pipeline nuevo: casos NO_MATCH, context + retriever + slots en paralelo (ThreadPoolExecutor), LLM judge secuencial.
+Pipeline nuevo (local): orquestador por caso NO_MATCH.
+Preprocess + armado de prompts en paralelo real (ProcessPoolExecutor, sin GIL); LLM judge secuencial de a uno.
+Config: model_path (nombre .gguf, vacío = sin LLM), n_ctx, n_threads, max_workers. Salida: analisis_no_match.csv, auditoria.jsonl, cases_debug/.
 """
 import os
 import json
-from concurrent.futures import ThreadPoolExecutor
-from typing import Dict, Any, List, Optional
+from concurrent.futures import ProcessPoolExecutor
+from typing import Dict, Any, List, Optional, Tuple
+
+# Globals para workers de proceso (evitar GIL; paralelismo real)
+_worker_df_turns = None
+_worker_index = None
+_worker_max_msgs = None
+_worker_top_int = None
+_worker_ev_per = None
+_worker_neutral = None
+
+
+def _init_process_worker(args: Tuple) -> None:
+    """Inicializador de cada proceso: recibe (df_turns, index, max_msgs, top_int, ev_per, neutral)."""
+    global _worker_df_turns, _worker_index, _worker_max_msgs, _worker_top_int, _worker_ev_per, _worker_neutral
+    (_worker_df_turns, _worker_index, _worker_max_msgs, _worker_top_int, _worker_ev_per, _worker_neutral) = args
+
+
+def _process_case_worker(case: Dict[str, Any]) -> Dict[str, Any]:
+    """Worker por caso: usa globals seteados por _init_process_worker."""
+    return process_one_case(
+        case,
+        _worker_df_turns,
+        _worker_index,
+        _worker_max_msgs,
+        _worker_top_int,
+        _worker_ev_per,
+        _worker_neutral,
+    )
+
+
+def _build_prompt_worker(payload: Dict[str, Any]) -> Tuple[Dict[str, Any], str]:
+    """Worker que arma el prompt para un payload (sin estado compartido)."""
+    return (payload, build_judge_prompt(payload))
 
 from core.spec import (
     MAX_MSG_CONTEXT,
@@ -21,6 +55,8 @@ from core.retriever import build_training_index, retrieve_candidates
 from core.slot_signals import detect_slot_signals
 from core.post_validate import post_validate
 from core.report_writer import write_reports
+from core.report_aggregate import write_informe_general
+from core.llm_runtime import build_judge_prompt
 
 
 def process_one_case(
@@ -107,13 +143,23 @@ def analizar_pipeline(
     ev_per = config.get("evidence_per_intent", EVIDENCE_PER_INTENT)
     neutral = config.get("neutral_flows") or FLOWS_NEUTRALES
 
-    def _process(case):
-        return process_one_case(case, df_turns, index, max_msgs, top_int, ev_per, neutral)
-
+    # Fase paralela 1 (procesos, sin GIL): preprocess por caso
+    worker_args = (df_turns, index, max_msgs, top_int, ev_per, neutral)
+    n_workers = max(1, min(len(cases), max_workers))
     payloads = []
-    with ThreadPoolExecutor(max_workers=max(1, min(len(cases), max_workers))) as executor:
-        for p in executor.map(_process, cases):
+    with ProcessPoolExecutor(
+        max_workers=n_workers,
+        initializer=_init_process_worker,
+        initargs=(worker_args,),
+    ) as executor:
+        for p in executor.map(_process_case_worker, cases):
             payloads.append(p)
+
+    # Fase paralela 2 (procesos, sin GIL): armar todos los prompts
+    payloads_with_prompts = []
+    with ProcessPoolExecutor(max_workers=n_workers) as executor:
+        for item in executor.map(_build_prompt_worker, payloads):
+            payloads_with_prompts.append(item)
 
     if use_llm and config.get("model_filename"):
         try:
@@ -132,13 +178,16 @@ def analizar_pipeline(
                 logger_callback(f"No se pudo cargar LLM: {e}. Continuando sin judge.")
             use_llm = False
 
+    # Fase secuencial: enviar de a uno a la LLM (cada prompt ya armado)
     rows = []
-    for i, payload in enumerate(payloads):
+    for i, (payload, prompt) in enumerate(payloads_with_prompts):
         if logger_callback and (i + 1) % 10 == 0:
-            logger_callback(f"Procesando case {i + 1}/{len(payloads)}...")
+            logger_callback(f"Procesando case {i + 1}/{len(payloads_with_prompts)} (LLM)...")
         if use_llm and config.get("model_filename"):
             try:
-                llm_result = llm.judge_case(payload)
+                llm_result = llm.chat_json(prompt)
+                if "confidence" not in llm_result:
+                    llm_result["confidence"] = 0.5
                 llm_result = post_validate(
                     llm_result,
                     payload.get("candidates", []),
@@ -204,5 +253,9 @@ def analizar_pipeline(
         write_jsonl=config.get("write_jsonl", True),
         write_debug=config.get("write_debug", False),
     )
+    if config.get("write_informe_general", True) and rows:
+        write_informe_general(rows, path_out, write_md=True)
+        if logger_callback:
+            logger_callback("Informe general escrito en " + path_out)
     if logger_callback:
         logger_callback("Reportes escritos en " + path_out)
