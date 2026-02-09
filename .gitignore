@@ -171,6 +171,10 @@ cython_debug/
 bin/*.dll
 bin/*.exe
 
+# Modelos GGUF (muy pesados; se descargan con entorno/install_llm.py)
+*.gguf
+models/*.gguf
+
 # Ruff stuff:
 .ruff_cache/
 
