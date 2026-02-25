@@ -12,7 +12,6 @@ Para **levantar el entorno y usar la app** (guía de arranque), ver el [README.m
 |-----------|-----------|
 | **[ARCHITECTURE.md](ARCHITECTURE.md)** | Arquitectura técnica: estructura del proyecto (incl. `entorno/`, `core/`, `views/`), módulos, config, pipeline con/sin LLM, paralelismo (ProcessPool + LLM secuencial), dos fases de salida (por caso e informe agregado), **qué es analyzer_cli**, CLI, tests y compilación a .exe. |
 | **[SPEC_PIPELINE.md](SPEC_PIPELINE.md)** | Especificación detallada del pipeline y del juez LLM: objetivo, restricciones, formatos de datos (chat turn, training, case), reglas de inferencia de flow, construcción de contexto, retriever de candidatos, slot signals, prompt del juez, decisiones (NO_MATCH, MISSING_PARAMETER_HANDLER, etc.), post-validación y reportes. |
-| **[PLAN_REFACTOR.md](PLAN_REFACTOR.md)** | Plan de refactor ya ejecutado (Fases 1–6); referencia histórica. |
 
 ---
 
