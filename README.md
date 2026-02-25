@@ -66,4 +66,4 @@ El resto de opciones y la documentación técnica están en **[docs/](docs/READM
 
 ## Licencia
 
-Uso interno (Banco Santander). Distribución restringida bajo autorización.
+Uso interno. Distribución restringida bajo autorización.
